@@ -7,7 +7,7 @@ const contactsPath = path.join(__dirname, '..', 'contacts.json')
 
 const addContact = async data => {
   const allContacts = await listContacts()
-  const newContact = { id: v4(), ...data }
+  const newContact = { id: allContacts.length + 1, ...data }
   const updateContacts = [...allContacts, newContact]
   await fs.writeFile(contactsPath, JSON.stringify(updateContacts))
   return newContact

@@ -6,7 +6,8 @@ const {
   listContacts,
   getContactById,
   addContact,
-  // removeContact,
+  removeContact,
+  updateContactById,
 } = require('../../model/contacts/index')
 
 const joiSchema = Joi.object({
@@ -17,7 +18,7 @@ const joiSchema = Joi.object({
       tlds: { allow: ['com', 'net'] },
     })
     .required(),
-  phone: Joi.number().required(),
+  phone: Joi.string().required(),
 })
 
 router.get('/', async (req, res, next) => {
@@ -67,11 +68,43 @@ router.post('/', async (req, res, next) => {
 })
 
 router.delete('/:contactId', async (req, res, next) => {
+  try {
+    const { contactId } = req.params
+    const result = await removeContact(contactId)
+    if (!result) {
+      throw new NotFound(`Contact with id-${contactId} not found`)
+    }
+    res.json({
+      status: 'success',
+      code: 200,
+      message: 'Contact deleted',
+    })
+  } catch (error) {
+    next(error)
+  }
   res.json({ message: 'template message' })
 })
 
-router.patch('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+router.put('/:contactId', async (req, res, next) => {
+  try {
+    const { error } = joiSchema.validate(req.body)
+    if (error) {
+      throw new BadRequest(error.message)
+    }
+    const { contactId } = req.params
+    const result = await updateContactById(contactId, req.body)
+    if (!result) {
+      throw new NotFound(`Contact with id-${contactId} not found`)
+    }
+
+    res.json({
+      status: 'success',
+      code: 200,
+      data: { result },
+    })
+  } catch (error) {
+    next(error)
+  }
 })
 
 module.exports = router

@@ -1,12 +1,11 @@
 const { Schema, model } = require('mongoose')
-require('colors')
 const Joi = require('joi')
 
 const contactSchema = Schema(
   {
     name: {
       type: String,
-      required: [true, 'Set name for contact'.bold.yellow],
+      required: [true, 'Set name for contact'],
     },
     email: {
       type: String,

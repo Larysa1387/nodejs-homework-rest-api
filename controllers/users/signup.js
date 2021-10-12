@@ -1,4 +1,5 @@
 const { Conflict } = require('http-errors')
+const bCrypt = require('bcryptjs')
 
 const { User } = require('../../models')
 
@@ -15,7 +16,11 @@ const signup = async (req, res) => {
     // // eslint-disable-next-line no-useless-return
     // return
   }
-  await User.create({ email, password })
+
+  const hashPassword = bCrypt.hashSync(password, bCrypt.genSaltSync(10))
+
+  await User.create({ email, password: hashPassword })
+
   res.status(201).json({
     status: 'success',
     code: 201,

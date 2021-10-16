@@ -16,7 +16,7 @@ const authenticate = async (req, _, next) => {
     // Find user by using model
     const user = await User.findById(id);
 
-    if (!user) {
+    if (!user || !user.token) {
       throw new Unauthorized('Invalid token');
     }
     // throw user by req (obj) to the controllers

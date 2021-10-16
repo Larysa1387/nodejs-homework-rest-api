@@ -3,11 +3,39 @@ const { NotFound } = require('http-errors');
 const { Contact } = require('../models');
 
 const getAll = async (req, res, next) => {
+  const { page = 1, limit = 10, favorite = null } = req.query;
+  const skip = (page - 1) * limit;
   const { _id } = req.user;
-  const contacts = await Contact.find({ owner: _id }).populate(
-    'owner',
-    'email'
-  ); // can add after {}, what we want to get: {}, "_id name email phone favorite"
+
+  if (favorite) {
+    const contacts = await Contact.find(
+      { owner: _id, favorite },
+      '_id name email phone favorite owner',
+      {
+        skip,
+        limit: +limit,
+      }
+    ).populate('owner', 'email');
+
+    res.json({
+      status: 'success',
+      code: 200,
+      data: {
+        contacts,
+      },
+    });
+  }
+
+  // can add after {}, what we want to get: {}, "_id name email phone favorite"
+  const contacts = await Contact.find(
+    { owner: _id },
+    '_id name email phone favorite owner',
+    {
+      skip,
+      limit: +limit,
+    }
+  ).populate('owner', 'email');
+
   res.json({
     status: 'success',
     code: 200,
@@ -71,7 +99,7 @@ const updateById = async (req, res, next) => {
   });
 };
 
-// Update status favorite in the contact
+// Update status favorite of the contact
 const updateStatus = async (req, res, next) => {
   const { contactId } = req.params;
   const { favorite } = req.body;
@@ -87,7 +115,7 @@ const updateStatus = async (req, res, next) => {
     status: 'success',
     code: 200,
     message: 'Status of favorite updated',
-    data: { result },
+    result: { favorite, contactId, name: result.name },
   });
 };
 

@@ -1,6 +1,6 @@
-const { Schema, model } = require('mongoose')
+const { Schema, model } = require('mongoose');
 
-const Joi = require('joi')
+const Joi = require('joi');
 
 const userSchema = Schema(
   {
@@ -22,12 +22,16 @@ const userSchema = Schema(
       type: String,
       default: null,
     },
+    avatarURL: {
+      type: String,
+      required: true,
+    },
   },
   {
     versionKey: false,
     timestamps: true, // add two features: create, update
   }
-)
+);
 
 const joiSchema = Joi.object({
   password: Joi.string().required(),
@@ -38,8 +42,8 @@ const joiSchema = Joi.object({
     })
     .required(),
   subscription: Joi.string(),
-})
+});
 
-const User = model('user', userSchema)
+const User = model('user', userSchema);
 
-module.exports = { User, joiSchema }
+module.exports = { User, joiSchema };

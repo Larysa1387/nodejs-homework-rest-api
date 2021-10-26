@@ -1,6 +1,6 @@
 const { User } = require('../../models');
 
-const current = async (req, res, next) => {
+const current = async (req, res) => {
   const { _id } = req.user;
   const curUser = await User.findById({ _id });
   res.status(200).json({

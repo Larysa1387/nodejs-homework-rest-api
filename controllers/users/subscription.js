@@ -1,6 +1,7 @@
 const { BadRequest } = require('http-errors');
 const { User } = require('../../models');
-const subscription = async (req, res, next) => {
+
+const subscription = async (req, res) => {
   const { _id } = req.user;
   const { subscription } = req.body;
 

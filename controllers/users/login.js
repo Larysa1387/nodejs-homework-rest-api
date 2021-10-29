@@ -15,8 +15,12 @@ const login = async (req, res) => {
   // if (!isCorrectPassword) {
   //   throw new Unauthorized('Password incorrect');
   // }
-  if (!user || !isCorrectPassword) {
-    throw new Unauthorized('Email or password is incorrect');
+
+  // Add opportunity to login only for verified email
+  if (!user || !user.verify || !isCorrectPassword) {
+    throw new Unauthorized(
+      'Email or password is incorrect, or email is not verified'
+    );
   }
 
   const payload = {

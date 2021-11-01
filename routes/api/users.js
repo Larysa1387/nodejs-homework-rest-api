@@ -16,6 +16,10 @@ const router = express.Router();
 // router on /api/users/...
 // /avatars
 router.post('/signup', validation(joiSchema), controllerWrapper(ctrl.signup));
+// router for email verification
+router.get('/verify/:verificationToken', controllerWrapper(ctrl.verify));
+router.post('/verify', controllerWrapper(ctrl.reVerify));
+
 router.post('/login', validation(joiSchema), controllerWrapper(ctrl.login));
 router.patch('/', authenticate, controllerWrapper(ctrl.subscription));
 router.patch(

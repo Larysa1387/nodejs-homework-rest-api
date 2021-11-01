@@ -29,7 +29,7 @@ const updateAvatar = async (req, res, next) => {
     await User.findByIdAndUpdate({ _id }, { avatarURL: image }, { new: true });
     res.json({
       status: 'success',
-      code: 200,
+      code: 201,
       message: 'User avatar updated',
       avatarURL: image,
     });
